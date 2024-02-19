@@ -242,12 +242,17 @@
                 <nav class="navbar">
                     <a href="/" class="nav-link {{ Request::is('home') ? 'active' : '' }}">Beranda</a>
                     <a href="/about" class="nav-link {{ Request::is('about') ? 'active' : '' }}">Daftar buku</a>
+
+    
                 </nav>
                 <div class="icons">
-                  <i class="fas fa-bars" id="bars"></i>
-                  <a href="/login" class="fas fa-user" id="login"></a>
-              </div>
-              
+                    <i class="fas fa-bars" id="bars"></i>
+                    @auth
+                        <a href="/logout" class="fas fa-sign-out-alt" id="logout"></a>
+                    @else
+                        <a href="/login" class="fas fa-user" id="login"></a>
+                    @endauth
+                </div>
             </header>
 
             <main class="mt-4">

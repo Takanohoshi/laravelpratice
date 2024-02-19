@@ -1,3 +1,4 @@
+@include('layouts.mimin')
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +8,17 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>atmin udah login</h1>
+    
+    @if (session()->has('loginberhasil'))
+    <div class="alert alert-success alert-dismissible fade show col-lg-10 mx-auto col-lg-5" role="alert">
+        {{ session('loginberhasil') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+    <center>
+    <div class="welcome-message">
+        <h1>Selamat datang atmin {{ Auth::user()->name }} !!</h1>
+    </div>
+    </center>
 </body>
 </html>
