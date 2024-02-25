@@ -43,7 +43,7 @@
                                     <a href="/dashboard/category" class="nav-link {{ Request::is('dashboard/category*') ? 'active' : '' }}">Kategori</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/dashboard/artikeldata" class="nav-link {{ Request::is('dashboard/artikeldata*') ? 'active' : '' }}">Data Buku</a>
+                                    <a href="/dashboard/databuk" class="nav-link {{ Request::is('dashboard/databuk*') ? 'active' : '' }}">Data Buku</a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="/dashboard/laporan" class="nav-link {{ Request::is('dashboard/laporan*') ? 'active' : '' }}">Laporan</a>

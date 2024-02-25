@@ -233,7 +233,7 @@
   }
       </style>
 
-    <title>login</title>
+    <title>Home</title>
 </head>
     <body>
         <div class="container">
@@ -242,9 +242,13 @@
                 <nav class="navbar">
                     <a href="/" class="nav-link {{ Request::is('home') ? 'active' : '' }}">Beranda</a>
                     <a href="/about" class="nav-link {{ Request::is('about') ? 'active' : '' }}">Daftar buku</a>
-
-    
+                    <div class="aa">
+                        @auth
+                        <a href="/pinjam" class="nav-link{{Request::is('pinjam') ? 'active' : ''}}">Peminjaman</a>
+                        @endauth
+                    </div>
                 </nav>
+
                 <div class="icons">
                     <i class="fas fa-bars" id="bars"></i>
                     @auth

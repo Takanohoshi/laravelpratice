@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
                 'username' => 'sakiouji',
                 'email' => 'saki@gmail.com',
                 'password' => Hash::make('1234'),
-                'level' => 'petugas',
+                'level' => 'guest',
             ]
             ];
             User::insert($data);

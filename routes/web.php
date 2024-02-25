@@ -4,7 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisController;
 use App\Http\Controllers\logoutController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\DatabukuController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,4 +45,14 @@ route::get('petugasdash', function(){
     return view ('petugas.index');
 });
 
+route::get('guestdash', function(){
+    return view ('home');
+});
+
 Route::resource('dashboard/users', AdminUserController::class)->except('show')->middleware('admin');
+Route::resource('dashboard/category', CategoryController::class)->except('show')->middleware('admin');
+Route::resource('dashboard/databuk', DatabukuController::class)->except('show')->middleware('admin');
+
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/detail/{id}', [HomeController::class, 'detail'])->name('detail');
