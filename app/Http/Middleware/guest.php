@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
-class guest
+class Guest
 {
     /**
      * Handle an incoming request.
@@ -18,6 +18,6 @@ class guest
     {
         if (Auth::check() && Auth::user()->level == 'guest'){
             return $next($request);
-        }
+         } $next($request);
     }
 }

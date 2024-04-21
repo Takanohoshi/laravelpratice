@@ -2,22 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Buku;
+use App\Models\Peminjaman;
+use App\Models\Ulasan;
 use Illuminate\Http\Request;
-use App\Models\Books;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        $books = Books::all();
-
-        return view('home', compact('books'));
+        $buku = Buku::all();
+        return view('home', compact('buku'));
     }
 
     public function detail($id)
     {
-        $book = Books::findOrFail($id);
+        $buku = Buku::findOrFail($id);
+        $user = auth()->user();
+        $ulasan = Ulasan::where('bookID', $id)->get();
 
-        return view('detail', compact('book'));
+        $statusPeminjaman = 'dikembalikan';
+    
+        if ($user) {
+            $peminjamanAktif = Peminjaman::where('bukuID', $id)
+                                ->where('userID', $user->id)
+                                ->whereIn('status', ['dipinjam', 'dikembalikan'])
+                                ->latest()
+                                ->first();
+    
+            if ($peminjamanAktif && $peminjamanAktif->status == 'dipinjam') {
+                $statusPeminjaman = 'dipinjam';
+            }
+        }
+    
+        return view('detail', compact('buku', 'statusPeminjaman', 'ulasan'));
     }
 }

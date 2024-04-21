@@ -1,4 +1,4 @@
-@include('layouts.gas')
+@include('layouts.petugas')
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,7 +17,15 @@
     @endif
     <center>
     <div class="welcome-message">
-        <h1>Selamat datang petugas {{ Auth::user()->name }} !!</h1>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <h1>Selamat datang petugas {{ Auth::user()->username }} !!</h1>
     </div>
     </center>
 </body>

@@ -9,30 +9,70 @@ use Illuminate\Support\Facades\Hash;
 
 class RegisController extends Controller
 {
-    public function showRegistrationForm()
+
+    /**
+     * Menampilkan halaman registrasi untuk tamu.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function regquestt()
     {
-        return view('register');
+        return view('reguest');
     }
 
+    /**
+     * Menampilkan halaman registrasi untuk admin.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function regminn()
+    {
+        return view('regmin');
+    }
+
+    /**
+     * Proses registrasi user berdasarkan jenis registrasi.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function register(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|confirmed|min:8',
-        ]);
+            // Validasi email unique
+            $request->validate([
+                'email' => 'unique:users,email'
+            ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'level' => 'guest',
-        ]);
-
-        Auth::login($user);
-
-        return redirect('/login');
+        if ($request->is('regquest')) {
+            // Logika untuk tamu
+            $user = new User();
+            $user->username = $request->input('username');
+            $user->email = $request->input('email');
+            $user->password = Hash::make($request->input('password'));
+            $user->namalengkap = $request->input('namalengkap');
+            $user->alamat = $request->input('alamat');
+            $user->level = 'guest';
+            $user->save();
+            
+            // Login user
+            Auth::login($user);
+            
+            return redirect('guestdash');
+        } elseif ($request->is('regmin')) {
+            // Logika untuk admin
+            $user = new User();
+            $user->username = $request->input('username');
+            $user->email = $request->input('email');
+            $user->password = Hash::make($request->input('password'));
+            $user->namalengkap = $request->input('namalengkap');
+            $user->alamat = $request->input('alamat');
+            $user->level = 'admin';
+            $user->save();
+            
+            // Login user
+            Auth::login($user);
+            
+            return redirect('admindash');
+        }
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -21,7 +21,7 @@ class LoginController extends Controller
         ];
         if(Auth::attempt($info)){
             $request -> session() -> regenerate();
-            // return redirect()-> intended('/');
+
             if (Auth::user()->level=='admin'){
                 return redirect('admindash')->with('loginberhasil', 'Login berhasil!!');
                 }
@@ -29,12 +29,11 @@ class LoginController extends Controller
                 return redirect('petugasdash')->with('loginberhasil', 'Login berhasil!!');
                 }
                 if  (Auth::user()->level=='guest'){
-                return redirect('guetsdash')->with('login berhasil', 'login berhasil');
+                    return redirect('guestdash')->with('loginberhasi', 'login berhasil!!');
                 }
         else{
             return redirect('/login')->with('loginError', 'Login gagal!, silahkan cek email atau password anda ');
         }
 
     }
-    
 }

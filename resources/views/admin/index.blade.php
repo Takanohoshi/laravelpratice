@@ -1,4 +1,4 @@
-@include('layouts.mimin')
+@include('layouts.admin')
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,7 +17,15 @@
     @endif
     <center>
     <div class="welcome-message">
-        <h1>Selamat datang atmin {{ Auth::user()->name }} !!</h1>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <h1>Selamat datang admin {{ Auth::user()->username }} !!</h1>
     </div>
     </center>
 </body>

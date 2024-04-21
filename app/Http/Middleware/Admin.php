@@ -18,6 +18,6 @@ class Admin
     {
         if (Auth::check() && Auth::user()->level == 'admin'){
             return $next($request);
-        }
+         } $next($request);
     }
 }

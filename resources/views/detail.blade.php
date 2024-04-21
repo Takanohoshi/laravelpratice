@@ -20,51 +20,100 @@
     <div class="mt-4">
         <div class="row justify-content-between">
             <div class="col-md-4">
-                <img src="{{ asset('storage/cover/' . $book->cover) }}" alt="{{ $book->judul }} Cover" class="img-fluid">
+                <img src="{{ asset('storage/cover/' . $buku->cover) }}" alt="{{ $buku->judul }} Cover" class="img-fluid">
             </div>
             <div class="col-md-8">
                 <p class="lead">Informasi Buku:</p>
                 <ul class="list-group">
-                    <li class="list-group-item">Judul: {{ $book->judul }}</li>
-                    <li class="list-group-item">Penulis: {{ $book->penulis }}</li>
-                    <li class="list-group-item">Penerbit: {{ $book->penerbit }}</li>
-                    <li class="list-group-item">Tahun Terbit: {{ $book->tahun }}</li>
-                    <li class="list-group-item">Deskripsi: {{ $book->deskripsi }}</li>
+                    <li class="list-group-item">Judul: {{ $buku->judul }}</li>
+                    <li class="list-group-item">Penulis: {{ $buku->penulis }}</li>
+                    <li class="list-group-item">Penerbit: {{ $buku->penerbit }}</li>
+                    <li class="list-group-item">Kategori: 
+                        @foreach($buku->kategori as $category)
+                            {{ $category->name }},
+                        @endforeach
+                    </li> 
+                    <li class="list-group-item">Tahunterbit: {{ $buku->tahun }}</li>
+                    <li class="list-group-item">Deskripsi: {{ $buku->deskripsi }}</li>
                 </ul>
-
+<br>
                 <!-- Tambahkan button peminjaman dengan kondisi -->
                 @auth
-                    <a href="{{ route('peminjaman.create', ['id' => $book->id]) }}" class="btn btn-success mt-3">Pinjam Buku</a>
-                @else
-                    <button class="btn btn-secondary mt-3" disabled>Pinjam (Login Diperlukan)</button>
-                    <p class="text-muted mt-2">Untuk memberikan ulasan, Anda harus meminjam buku terlebih dahulu.</p>
-                @endauth
-
-                <!-- Tampilkan formulir penilaian jika buku telah dipinjam -->
-                @auth
-                    @if (userHasBorrowedBook($book->id))
-                        <div class="mt-4">
-                            <h2>Ulasan Anda</h2>
-                            <form action="{{ route('ulasan.store', ['id' => $book->id]) }}" method="post">
-                                @csrf
-                                <div class="mb-3">
-                                    <label for="rating" class="form-label">Rating (1-10):</label>
-                                    <input type="number" class="form-control" id="rating" name="rating" min="1" max="10" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="ulasan" class="form-label">Ulasan:</label>
-                                    <textarea class="form-control" id="ulasan" name="ulasan" rows="3" required></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Kirim Ulasan</button>
-                            </form>
-                        </div>
+                    @if($statusPeminjaman === 'dikembalikan')
+                        <!-- Form peminjaman jika buku telah dikembalikan -->
+                        <form action="{{ route('pinjam.store', ['id' => $buku->id]) }}" method="POST" style="display:inline;">
+                            @csrf
+                            <button type="submit" class="btn btn-success">Pinjam Buku</button>
+                        </form>
+                    @elseif($statusPeminjaman === 'dipinjam')
+                        <!-- Menampilkan form ulasan jika buku sedang dipinjam -->
+                        <form action="{{ route('ulasan.store', ['id' => $buku->id]) }}" method="post">
+                            @csrf
+                            <input type="hidden" name="book_id" value="{{ $buku->id }}">
+                            <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+                            <div class="form-group mt-3">
+                                <label for="ulasan">Ulasan:</label>
+                                <textarea name="ulasan" id="ulasan" class="form-control" required></textarea>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="rating">Rating (1-5):</label>
+                                <input type="number" name="rating" id="rating" class="form-control" min="1" max="5" required>
+                            </div>
+                            <br>
+                            <button type="submit" class="btn btn-primary">Submit Ulasan</button>
+                        </form>
                     @endif
+                @else
+                    <!-- Tombol login diperlukan -->
+                    <button class="btn btn-secondary mt-3" disabled>Pinjam/Ulas (Login Diperlukan)</button>
                 @endauth
             </div>
         </div>
     </div>
 
+
+    <div class="mt-4">
+        <p class="lead">Ulasan Pengguna:</p>
+        @if($ulasan->count() > 0)
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Ulasan</th>
+                        <th>Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($ulasan as $index => $review)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $review->ulasan }}</td>
+                            <td>{{ $review->rating }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @else
+            <p class="text-muted">Tidak ada ulasan untuk buku ini.</p>
+        @endif
+    </div>
+
+    
+
     <!-- Tambahkan script JS Bootstrap jika diperlukan -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+        // Ambil elemen input tanggal pinjam dan tanggal kembali
+        const tanggalPinjamInput = document.getElementById('tanggal_pinjam');
+        const tanggalKembaliInput = document.getElementById('tanggal_kembali');
+
+        tanggalPinjamInput.addEventListener('change', function() {
+            const tanggalPinjam = new Date(tanggalPinjamInput.value);
+            const tanggalKembali = new Date(tanggalPinjam);
+            tanggalKembali.setDate(tanggalKembali.getDate() + 7);
+            tanggalKembaliInput.value = tanggalKembali.toISOString().split('T')[0];
+        });
+    </script>
 </body>
 </html>
+

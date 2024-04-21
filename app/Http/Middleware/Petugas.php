@@ -18,6 +18,6 @@ class Petugas
     {
         if (Auth::check() && Auth::user()->level == 'petugas'){
             return $next($request);
-        }
+         } $next($request);
     }
 }

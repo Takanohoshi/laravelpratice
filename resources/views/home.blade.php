@@ -11,64 +11,77 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
         h1 {
             font-size: 2em;
+            text-align: center;
         }
 
         .books-container {
             display: flex;
             flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
         }
 
         .book {
-            color: inherit;
+            width: 250px;
             margin: 10px;
-            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            text-decoration: none; /* Menonaktifkan underline */
+            color: inherit; /* Menyesuaikan warna teks */
+        }
+
+        .book:hover {
+            transform: scale(1.05);
         }
 
         .book img {
-            max-width: 150px; /* Atur lebar maksimal cover */
+            max-width: 100%;
             height: auto;
+            border-radius: 5px;
         }
 
         .book h3 {
-            text-align: left;
-            color: inherit;
-            font-size: 2em; /* Atur ukuran font judul */
+            font-size: 1.2em;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .book p {
+            font-size: 1em;
             margin-top: 5px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <center>
-    <h1>SELAMAT DATANG DI LIBRARY</h1>
-    <h2>KAWASAN WAJIB MEMBACA</h2>
-    </center>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <h1>Daftar Buku</h1>
+    <div class="container">
+        <h1>Daftar Buku</h1>
 
-    <div class="books-container">
-        @foreach($books as $book)
-            <div class="book">
-                <img src="{{ asset('storage/cover/' . $book->cover) }}" alt="{{ $book->judul }} Cover">
-                <h3><a href="{{ route('detail', ['id' => $book->id]) }}">{{ $book->judul }}</a></h3>
-            </div>
-        @endforeach
+        <div class="books-container">
+            @foreach($buku as $buku)
+                <a href="{{ route('detail', ['id' => $buku->id]) }}" class="book">
+                    <img src="{{ asset('storage/cover/' . $buku->cover) }}" alt="{{ $buku->judul }} Cover">
+                    <h3>{{ $buku->judul }}</h3>
+                    <p>{{ $buku->pengarang }}</p>
+                    <p>{{ $buku->tahun_terbit }}</p>
+                </a>
+            @endforeach
+        </div>
     </div>
 </body>
 </html>
